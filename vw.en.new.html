@@ -76,9 +76,9 @@
         }
 
         .badge {
-            background: rgba(0, 91, 150, 0.3);
-            border: 1px solid var(--accent-blue);
-            color: #93c5fd;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: #fca5a5;
             padding: 8px 14px;
             border-radius: 20px;
             font-size: 12px;
@@ -160,6 +160,7 @@
             font-weight: bold;
         }
 
+        /* HIGH-PRECISION VW SLIDERS */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
@@ -171,22 +172,33 @@
             width: 100%;
             height: 8px;
             cursor: pointer;
-            background: #1e222d;
+            background: #11141c;
             border-radius: 4px;
-            border: 1px solid #2e3444;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+            border: 1px solid #282e3d;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 22px;
-            width: 14px;
-            border-radius: 3px;
-            background: linear-gradient(90deg, #d1d5db 35%, #ef4444 35%, #ef4444 65%, #d1d5db 65%);
-            border: 1px solid #4b5563;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg");
+            background-size: 18px 18px;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid #001e50;
             cursor: pointer;
-            margin-top: -7px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.9);
+            margin-top: -10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.4);
+            transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+            border-color: #3b82f6;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 0 2px rgba(255,255,255,0.8);
         }
 
         .main-content {
@@ -198,11 +210,12 @@
 
         .tabs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             background: var(--panel-bg);
             padding: 6px;
             border-radius: 10px;
             border: 1px solid var(--panel-border);
+            overflow-x: auto;
         }
 
         .tab-btn {
@@ -210,14 +223,15 @@
             background: transparent;
             color: var(--text-muted);
             border: none;
-            padding: 10px 12px;
-            font-size: 12px;
+            padding: 10px 10px;
+            font-size: 11px;
             font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .tab-btn:hover {
@@ -438,14 +452,13 @@
 
     <header>
         <div class="header-brand">
-            <!-- Volkswagen Logo (Web SVG with Fallback) -->
             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg" alt="VW Logo" class="vw-logo">
             <div class="header-title">
                 <h1>Volkswagen AG — Strategic Industrial Simulator (2026–2030)</h1>
                 <p>Macroeconomic Transformation, Cost Structure & Industrial Policy Modeling (BMWK / Lower Saxony Framework)</p>
             </div>
         </div>
-        <div class="badge">Q2 2026 Baseline Operating Margin: 3.8%</div>
+        <div class="badge">Ad-Hoc Sept 2026 Profit Warning: Margin ≤1.0%</div>
     </header>
 
     <div class="container">
@@ -486,7 +499,15 @@
                     <input type="range" id="s-bev" min="10" max="80" step="5" value="35">
                 </div>
 
-                <div class="sidebar-header-red">External Inputs & Markets</div>
+                <div class="sidebar-header-red">2026 Financial Shocks & External Inputs</div>
+
+                <div class="control-group">
+                    <div class="control-label color-red">
+                        <span>Special One-Off Charges (€B)</span>
+                        <span class="control-value color-red" id="v-oneoff">€10B</span>
+                    </div>
+                    <input type="range" id="s-oneoff" min="0" max="15" step="1" value="10">
+                </div>
 
                 <div class="control-group">
                     <div class="control-label color-blue">
@@ -526,11 +547,12 @@
                 <!-- TABS NAVIGATION -->
                 <div class="tabs">
                     <button class="tab-btn active" onclick="setTab('finance')">1. P&L & Margins</button>
-                    <button class="tab-btn" onclick="setTab('capacity')">2. Plants & Capacity</button>
-                    <button class="tab-btn" onclick="setTab('social')">3. Workforce & Labor</button>
-                    <button class="tab-btn" onclick="setTab('markets')">4. Markets & Geography</button>
-                    <button class="tab-btn" onclick="setTab('lineup')">5. Product Lineup</button>
-                    <button class="tab-btn" onclick="setTab('esg')">6. ESG & BMWK Policy</button>
+                    <button class="tab-btn" onclick="setTab('adhoc')">2. 2026 Profit Warning</button>
+                    <button class="tab-btn" onclick="setTab('capacity')">3. Capacity</button>
+                    <button class="tab-btn" onclick="setTab('social')">4. Workforce</button>
+                    <button class="tab-btn" onclick="setTab('markets')">5. Markets</button>
+                    <button class="tab-btn" onclick="setTab('lineup')">6. Lineup</button>
+                    <button class="tab-btn" onclick="setTab('esg')">7. ESG & Policy</button>
                 </div>
 
                 <!-- CHART 1: FINANCE -->
@@ -543,7 +565,17 @@
                     </div>
                 </div>
 
-                <!-- CHART 2: CAPACITY -->
+                <!-- CHART 2: AD-HOC PROFIT WARNING 2026 -->
+                <div id="tab-adhoc" class="chart-window">
+                    <div class="chart-header">
+                        <div class="chart-title">Ad-Hoc Forecast FY2026: Operating Profit Bridge (€B)</div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="chartAdhoc"></canvas>
+                    </div>
+                </div>
+
+                <!-- CHART 3: CAPACITY -->
                 <div id="tab-capacity" class="chart-window">
                     <div class="chart-header">
                         <div class="chart-title">Production Capacity vs. Actual Vehicle Sales (M Units)</div>
@@ -553,7 +585,7 @@
                     </div>
                 </div>
 
-                <!-- CHART 3: SOCIAL -->
+                <!-- CHART 4: SOCIAL -->
                 <div id="tab-social" class="chart-window">
                     <div class="chart-header">
                         <div class="chart-title">Headcount & Labor Conflict Threat Index (IG Metall)</div>
@@ -563,7 +595,7 @@
                     </div>
                 </div>
 
-                <!-- CHART 4: MARKETS -->
+                <!-- CHART 5: MARKETS -->
                 <div id="tab-markets" class="chart-window">
                     <div class="chart-header">
                         <div class="chart-title">Geographic Sales Distribution (M Units)</div>
@@ -573,7 +605,7 @@
                     </div>
                 </div>
 
-                <!-- CHART 5: LINEUP WITH GAUGE SPEEDOMETER -->
+                <!-- CHART 6: LINEUP WITH GAUGE SPEEDOMETER -->
                 <div id="tab-lineup" class="chart-window">
                     <div class="chart-header">
                         <div class="chart-title">Portfolio Mix: ICE vs. BEV Electric Vehicles (%)</div>
@@ -613,7 +645,7 @@
                     </div>
                 </div>
 
-                <!-- CHART 6: ESG -->
+                <!-- CHART 7: ESG -->
                 <div id="tab-esg" class="chart-window">
                     <div class="chart-header">
                         <div class="chart-title">EU Regulatory Costs & Transformation Capex (€B)</div>
@@ -659,7 +691,25 @@
                 }
             });
 
-            // 2. Capacity Chart
+            // 2. Ad-Hoc 2026 Profit Warning Bridge Chart
+            charts.adhoc = new Chart(document.getElementById('chartAdhoc'), {
+                type: 'bar',
+                data: {
+                    labels: ['Original Guidance', 'Porsche Impairment', 'Restructuring Costs', 'China Drag', 'Updated FY2026 Outlook'],
+                    datasets: [{
+                        label: 'Operating Earnings Impact (€B)',
+                        data: [15.0, -6.0, -3.0, -2.8, 3.15],
+                        backgroundColor: ['#3b82f6', '#ef4444', '#f59e0b', '#ef4444', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { title: { display: true, text: 'EBIT (€B)' } } }
+                }
+            });
+
+            // 3. Capacity Chart
             charts.capacity = new Chart(document.getElementById('chartCapacity'), {
                 type: 'bar',
                 data: {
@@ -672,7 +722,7 @@
                 options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // 3. Social Chart
+            // 4. Social Chart
             charts.social = new Chart(document.getElementById('chartSocial'), {
                 type: 'line',
                 data: {
@@ -691,7 +741,7 @@
                 }
             });
 
-            // 4. Markets Chart
+            // 5. Markets Chart
             charts.markets = new Chart(document.getElementById('chartMarkets'), {
                 type: 'bar',
                 data: {
@@ -706,7 +756,7 @@
                 options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
             });
 
-            // 5. Lineup Chart
+            // 6. Lineup Chart
             charts.lineup = new Chart(document.getElementById('chartLineup'), {
                 type: 'line',
                 data: {
@@ -719,7 +769,7 @@
                 options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100, title: { display: true, text: '% of Total Portfolio' } } } }
             });
 
-            // 5b. Gauge Speedometer Chart
+            // 6b. Gauge Speedometer Chart
             charts.gauge = new Chart(document.getElementById('chartGauge'), {
                 type: 'doughnut',
                 data: {
@@ -740,7 +790,7 @@
                 }
             });
 
-            // 6. ESG Chart
+            // 7. ESG Chart
             charts.esg = new Chart(document.getElementById('chartEsg'), {
                 type: 'bar',
                 data: {
@@ -759,6 +809,7 @@
             const plantsClosed = parseInt(document.getElementById('s-plants').value);
             const modelsCut = parseInt(document.getElementById('s-models').value);
             const bevShare = parseInt(document.getElementById('s-bev').value);
+            const oneoffCharges = parseInt(document.getElementById('s-oneoff').value);
             const chinaTrend = parseInt(document.getElementById('s-china').value);
             const tariffs = parseInt(document.getElementById('s-tariffs').value);
             const ecoIndex = parseInt(document.getElementById('s-eco').value);
@@ -768,11 +819,19 @@
             document.getElementById('v-plants').innerText = plantsClosed + ' plants';
             document.getElementById('v-models').innerText = '-' + modelsCut + '%';
             document.getElementById('v-bev').innerText = bevShare + '%';
+            document.getElementById('v-oneoff').innerText = '€' + oneoffCharges + 'B';
             document.getElementById('v-china').innerText = chinaTrend + '%';
             document.getElementById('v-tariffs').innerText = '€' + tariffs + 'B';
             document.getElementById('v-eco').innerText = 'Index ' + ecoIndex;
             const aiText = ['Low', 'Moderate', 'High', 'Aggressive', 'Full AI Integration'];
             document.getElementById('v-ai').innerText = aiText[aiLevel - 1];
+
+            // Update Ad-hoc 2026 Bridge
+            let porscheWriteoff = Math.min(oneoffCharges, 6.0);
+            let restructWriteoff = Math.max(0, oneoffCharges - porscheWriteoff);
+            let updatedEbit2026 = Math.max(0, 15.0 - porscheWriteoff - restructWriteoff - Math.abs(chinaTrend) * 0.14);
+            charts.adhoc.data.datasets[0].data = [15.0, -porscheWriteoff, -restructWriteoff, -(Math.abs(chinaTrend) * 0.14).toFixed(1), updatedEbit2026.toFixed(2)];
+            charts.adhoc.update();
 
             let dataFinanceMargin = [], dataFinanceProfit = [];
             let dataCapCapacity = [], dataCapSales = [];
@@ -792,9 +851,10 @@
                 let lossesChina = (Math.abs(chinaTrend) * 0.05) * (chinaTrend < 0 ? 1 : -0.5);
                 let lossesTariffs = (tariffs * 0.25);
                 let lossesEco = (ecoIndex * 0.15);
+                let impactOneOff = (i === 0) ? (oneoffCharges * 0.3) : 0; 
 
                 let baseMargin = 3.8;
-                let netMarginEffect = savingsFromJobs + savingsFromPlants + savingsFromLineup + savingsFromAI - lossesChina - lossesTariffs - lossesEco;
+                let netMarginEffect = savingsFromJobs + savingsFromPlants + savingsFromLineup + savingsFromAI - lossesChina - lossesTariffs - lossesEco - impactOneOff;
                 let currentMargin = Math.max(0.5, baseMargin + netMarginEffect * (t + 0.2));
                 let currentProfit = (1.56 * (currentMargin / 3.8) + (i * 0.4)).toFixed(2);
 
@@ -863,13 +923,17 @@
             charts.esg.data.datasets[1].data = dataEsgInvest;
             charts.esg.update();
 
-            updateNarrative(dataFinanceMargin[4], jobsCut, plantsClosed, chinaTrend, tariffs, dataSocialConflict[4]);
+            updateNarrative(dataFinanceMargin[4], jobsCut, plantsClosed, chinaTrend, tariffs, dataSocialConflict[4], oneoffCharges);
         }
 
-        function updateNarrative(finalMargin, jobs, plants, china, tariffs, conflict) {
+        function updateNarrative(finalMargin, jobs, plants, china, tariffs, conflict, oneoff) {
             let html = `<h4>Executive Summary & Strategic Outlook (Target Year 2030):</h4>`;
             
             html += `Projected Operating Margin: <span class="metric-badge ${finalMargin >= 6.5 ? 'badge-green' : finalMargin >= 4.5 ? 'badge-amber' : 'badge-red'}">${finalMargin}%</span> (Restructuring Target Threshold: 6.5%+).<br>`;
+
+            if (oneoff > 5) {
+                html += `🚨 <strong>Ad-Hoc Warning Shock (FY2026):</strong> One-off non-cash charges of €${oneoff}B (led by Porsche goodwill write-down) constrain FY2026 reported operating return to ≤1.0%. Underlying profitability relies entirely on structural cost reductions.<br>`;
+            }
 
             if (jobs > 50 || plants > 0) {
                 html += `⚠️ <strong>Socio-Political Conflict Risk:</strong> Proposed headcount reduction of ${jobs}k employees and closure of ${plants} domestic plant(s) present severe risk of strike action (Labor Conflict Index: <span class="metric-badge badge-red">${conflict}/100</span>). IG Metall union and the State of Lower Saxony (20% blocking minority) are highly likely to veto these proposals at the Supervisory Board level.<br>`;
