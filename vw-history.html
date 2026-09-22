@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volkswagen AG — Interactive Corporate Chronicle (1937–2026+)</title>
+    <style>
+        :root {
+            --bg-dark: #0a0b0e;
+            --panel-bg: #14161d;
+            --panel-border: #232733;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-cyan: #06b6d4;
+            --vw-blue: #001e50;
+            --vw-blue-bright: #005b96;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #001233 0%, #002855 50%, var(--panel-bg) 100%);
+            border: 1px solid var(--vw-blue-bright);
+            padding: 20px 28px;
+            border-radius: 14px;
+            box-shadow: 0 0 25px rgba(0, 91, 150, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .vw-logo-head {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .header-title p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: #93c5fd;
+        }
+
+        /* CHRONO SLIDER SECTION */
+        .timeline-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-title {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-blue);
+        }
+
+        .era-year-badge {
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--accent-blue);
+            padding: 4px 14px;
+            border-radius: 8px;
+        }
+
+        /* VW SLIDER STYLING */
+        .slider-container {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus { outline: none; }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 10px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #001233 0%, var(--vw-blue-bright) 50%, #3b82f6 100%);
+            border-radius: 6px;
+            border: 1px solid #2e3444;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 36px;
+            width: 36px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg");
+            background-size: 22px 22px;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid var(--vw-blue);
+            cursor: pointer;
+            margin-top: -13px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.6);
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.18);
+            box-shadow: 0 0 16px rgba(59, 130, 246, 0.9), 0 0 0 3px rgba(255,255,255,0.9);
+        }
+
+        .timeline-ticks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            padding: 0 5px;
+        }
+
+        .tick-item {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .tick-item.active {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        /* ERA CONTENT DISPLAY */
+        .era-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-left: 5px solid var(--accent-blue);
+            border-radius: 14px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .era-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 16px;
+        }
+
+        .era-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .era-subtitle {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .metric-box {
+            background: #181b24;
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 14px 18px;
+        }
+
+        .metric-box-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .metric-box-val {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 4px;
+        }
+
+        .era-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #d1d5db;
+        }
+
+        .era-description p { margin: 0 0 12px 0; }
+        .era-description p:last-child { margin: 0; }
+
+        .highlights-list {
+            margin: 12px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .highlights-list li {
+            margin-bottom: 8px;
+            color: #e5e7eb;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Volkswagen_logo_2019.svg" alt="VW Logo" class="vw-logo-head">
+        <div class="header-title">
+            <h1>Volkswagen AG — Corporate History & Milestones</h1>
+            <p>Interactive Historical Chronicle for Managerial & Industrial Economics Case Studies</p>
+        </div>
+    </header>
+
+    <!-- TIMELINE SLIDER -->
+    <div class="timeline-card">
+        <div class="timeline-header">
+            <span class="timeline-title">Historical Era Selector (Drag Logo to Explore)</span>
+            <span class="era-year-badge" id="era-year-display">1937 – 1945</span>
+        </div>
+        
+        <div class="slider-container">
+            <input type="range" id="historySlider" min="0" max="5" step="1" value="0">
+        </div>
+
+        <div class="timeline-ticks">
+            <span class="tick-item active" onclick="setEra(0)">1937–1945</span>
+            <span class="tick-item" onclick="setEra(1)">1948–1973</span>
+            <span class="tick-item" onclick="setEra(2)">1973–1993</span>
+            <span class="tick-item" onclick="setEra(3)">1993–2015</span>
+            <span class="tick-item" onclick="setEra(4)">2015–2023</span>
+            <span class="tick-item" onclick="setEra(5)">2024–2026+</span>
+        </div>
+    </div>
+
+    <!-- ERA DETAIL DISPLAY CARD -->
+    <div class="era-card" id="eraCard">
+        <!-- Content dynamically injected via JS -->
+    </div>
+
+    <script>
+        const eraData = [
+            {
+                yearRange: "1937 – 1945",
+                title: "1. Foundation & The People's Car Concept",
+                subtitle: "Origins of the KdF-Wagen and Industrial Birth of Wolfsburg",
+                model: "KdF-Wagen (Type 1 / Beetle Prototype)",
+                volume: "< 10,000 units (Pre-war)",
+                innovation: "Air-cooled Rear Engine Architecture",
+                description: `
+                    <p>In May 1937, <em>Gesellschaft zur Vorbereitung des Deutschen Volkswagens mbH</em> was established, later renamed <strong>Volkswagenwerk GmbH</strong> in 1938. Designer Ferdinand Porsche was commissioned to create an affordable, durable passenger car capable of carrying a family at 100 km/h on the newly constructed Autobahn network.</p>
+                    <p>Construction of the main factory in Wolfsburg began in 1938. However, WWII diverted production entirely to military vehicles (Kübelwagen, Schwimmwagen). Civil mass production of the iconic Beetle only materialized post-1945 under British military administration.</p>
+                    <ul class="highlights-list">
+                        <li><strong>Key Takeaway:</strong> Laying down the massive Wolfsburg manufacturing footprint, designed for unprecedented economies of scale.</li>
+                        <li><strong>British Custody (1945–1949):</strong> Major Ivan Hirst saved the plant from demolition, placing an initial order for 20,000 cars for occupation forces.</li>
+                    </ul>
+                `
+            },
+            {
+                yearRange: "1948 – 1973",
+                title: "2. Post-War Miracle & Global Expansion",
+                subtitle: "The Nordhoff Era, US Market Breakthrough & The Beetle Phenomenon",
+                model: "VW Beetle (Type 1) & VW Bus (Type 2)",
+                volume: "15,000,000+ units cumulative",
+                innovation: "Global Dealer Network & Lean Monostructure",
+                description: `
+                    <p>Under the leadership of Director General <strong>Heinz Nordhoff</strong> (1948–1968), Volkswagen became the symbol of West Germany's <em>Wirtschaftswunder</em> (Economic Miracle). Nordhoff implemented rigorous quality control, expanded international export channels, and established key assembly plants in Brazil and South Africa.</p>
+                    <p>By February 1972, the Beetle surpassed the Ford Model T as the world's most produced automobile, with over 15 million units manufactured. However, total reliance on a single air-cooled, rear-engine concept created severe strategic vulnerability by the late 1960s as consumer preferences shifted toward modern hatchback designs.</p>
+                    <ul class="highlights-list">
+                        <li><strong>1960 Privatization:</strong> VW transformed into a joint-stock company; the State of Lower Saxony retained a strategic 20% voting stake (VW Law).</li>
+                        <li><strong>1965 Auto Union Acquisition:</strong> VW acquired Auto Union (Audi) from Daimler-Benz, securing vital water-cooled technology.</li>
+                    </ul>
+                `
+            },
+            {
+                yearRange: "1973 – 1993",
+                title: "3. Water-Cooled Revolution & Multi-Brand Growth",
+                subtitle: "The Golf Pivot, Front-Wheel Drive Era & Initial Globalization",
+                model: "Golf I, Passat B1, Polo I",
+                volume: "3.2M units/year (Group avg.)",
+                innovation: "Transverse Front-Engine / FWD Layout",
+                description: `
+                    <p>Facing imminent financial crisis due to declining Beetle sales, CEO Toni Schmücker oversaw a radical engineering turnaround. Designed by Giorgetto Giugiaro, the <strong>VW Golf I (1974)</strong> revolutionized the compact class with front-wheel drive, a transverse water-cooled engine, and a practical hatchback tailgate.</p>
+                    <p>During the 1980s, CEO Carl Hahn pioneered aggressive brand acquisitions: purchasing Spanish manufacturer <strong>SEAT (1986)</strong> and Czech automaker <strong>Škoda (1991)</strong>, transforming VW into a multi-tiered European automaking conglomerate. VW also entered China in 1984 via the Shanghai-VW joint venture.</p>
+                    <ul class="highlights-list">
+                        <li><strong>1976 GTI Segment Creation:</strong> Launch of the Golf GTI established the modern 'hot hatch' market category.</li>
+                        <li><strong>Pioneering China:</strong> Early entry into China secured a dominant 50%+ market share advantage for over two decades.</li>
+                    </ul>
+                `
+            },
+            {
+                yearRange: "1993 – 2015",
+                title: "4. The Premium Empire & Platform Standardization",
+                subtitle: "Ferdinand Piëch's Engineering Dominance & MQB Architecture",
+                model: "Golf IV, Bugatti Veyron, Audi A6, Touareg",
+                volume: "10.0M units/year (Target reached 2014)",
+                innovation: "Modular Transverse Matrix (MQB Platform)",
+                description: `
+                    <p>Under the visionary leadership of <strong>Ferdinand Piëch</strong> (CEO 1993–2002, Supervisory Board Chairman until 2015), Volkswagen executed an unprecedented multi-brand escalation. Piëch added premium brands <strong>Bentley, Bugatti, and Lamborghini</strong>, while positioning Audi as a direct rival to BMW and Mercedes-Benz.</p>
+                    <p>To control ballooning operational costs, VW pioneered the <strong>MQB (Modularer Querbaukasten)</strong> platform in 2012. MQB standardized structural dimensions across hundreds of models (VW, Audi, SEAT, Škoda), yielding massive purchasing power and flexible multi-model assembly lines.</p>
+                    <ul class="highlights-list">
+                        <li><strong>Porsche Integration (2009–2012):</strong> After a dramatic failed takeover bid by Porsche SE, VW Group absorbed Porsche AG into its brand matrix.</li>
+                        <li><strong>Global #1 Pursuit:</strong> Strategy 2018 aimed to surpass Toyota in global unit sales, volume, and profitability.</li>
+                    </ul>
+                `
+            },
+            {
+                yearRange: "2015 – 2023",
+                title: "5. Dieselgate Crisis & The Electric Pivot (MEB)",
+                subtitle: "Regulatory Shock, Strategy NEW AUTO & Launch of the ID. Series",
+                model: "VW ID.3, ID.4, Porsche Taycan, Audi e-tron",
+                volume: "8.3M – 9.3M units/year",
+                innovation: "Modular Electric Drive Matrix (MEB)",
+                description: `
+                    <p>In September 2015, the US EPA issued a notice of violation regarding defeat devices in TDI diesel engines. The <strong>'Dieselgate' crisis</strong> cost VW over €32 billion in fines, legal settlements, and recalls globally, triggering an immediate overhaul of corporate governance and leadership.</p>
+                    <p>CEOs Matthias Müller and Herbert Diess responded with a total commitment to battery electric vehicles (BEVs). VW invested over €50 billion in the bespoke <strong>MEB electric platform</strong>, converting the Zwickau plant into Europe's largest EV production hub and launching the ID. family (ID.3, ID.4).</p>
+                    <ul class="highlights-list">
+                        <li><strong>Cariad Software Division:</strong> Established to develop a unified group software architecture (E3 1.1 / 1.2 / 2.0).</li>
+                        <li><strong>PowerCo Battery Unit:</strong> Created to manage gigafactory cell production across Europe and North America.</li>
+                    </ul>
+                `
+            },
+            {
+                yearRange: "2024 – 2026+",
+                title: "6. Modern Restructuring Crisis & Industrial Policy",
+                subtitle: "China EV Competition, German Cost Structures & Ad-Hoc Profit Warnings",
+                model: "ID.7, Porsche Macan EV, VW Golf 8.5 Hybrid",
+                volume: "9.0M – 9.2M units projected",
+                innovation: "AI Factory Integration & SSP Unified Architecture",
+                description: `
+                    <p>By 2024–2026, Volkswagen AG entered its most severe structural restructuring period in decades. Rapid expansion of Chinese domestic EV manufacturers (BYD, Geely, NIO) eroded VW's legacy market share in China, while high European energy costs, wage inflation, and software delays squeezed operating margins down to threshold levels (≤1.0% reported return in FY2026 after €10B one-off charges).</p>
+                    <p>Under CEO <strong>Oliver Blume</strong>, VW initiated the <em>'Performance Program'</em> targeting €10 billion in structural savings, contemplating domestic plant closures in Germany and job reductions—setting up a major strategic conflict with the IG Metall union and the State of Lower Saxony.</p>
+                    <ul class="highlights-list">
+                        <li><strong>Ad-Hoc Warning Shock (2026):</strong> Non-cash write-downs (including Porsche goodwill) and elevated tariffs highlight urgent transformation needs.</li>
+                        <li><strong>Rivian & Xpeng Partnerships:</strong> Strategic investments to source localized software architectures and low-cost EV platforms for China and North America.</li>
+                    </ul>
+                `
+            }
+        ];
+
+        function renderEra(index) {
+            const era = eraData[index];
+            document.getElementById('era-year-display').innerText = era.yearRange;
+            
+            const html = `
+                <div class="era-card-header">
+                    <div>
+                        <h2 class="era-title">${era.title}</h2>
+                        <div class="era-subtitle">${era.subtitle}</div>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-box-label">Flagship / Era Model</div>
+                        <div class="metric-box-val">${era.model}</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-box-label">Production / Sales Volume</div>
+                        <div class="metric-box-val">${era.volume}</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-box-label">Key Engineering Milestone</div>
+                        <div class="metric-box-val">${era.innovation}</div>
+                    </div>
+                </div>
+
+                <div class="era-description">
+                    ${era.description}
+                </div>
+            `;
+            
+            document.getElementById('eraCard').innerHTML = html;
+
+            // Update tick active states
+            const ticks = document.querySelectorAll('.tick-item');
+            ticks.forEach((tick, i) => {
+                if(i === parseInt(index)) {
+                    tick.classList.add('active');
+                } else {
+                    tick.classList.remove('active');
+                }
+            });
+        }
+
+        function setEra(index) {
+            document.getElementById('historySlider').value = index;
+            renderEra(index);
+        }
+
+        document.getElementById('historySlider').addEventListener('input', (e) => {
+            renderEra(e.target.value);
+        });
+
+        // Initialize on page load
+        window.onload = () => {
+            renderEra(0);
+        };
+    </script>
+</body>
+</html>
